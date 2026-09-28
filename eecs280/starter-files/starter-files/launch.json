@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Matrix Tests",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/Matrix_public_tests.exe", 
+      "MIMode": "gdb",
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}
