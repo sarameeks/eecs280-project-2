@@ -73,22 +73,26 @@ void Image_init(Image* img, std::istream& is) {
 //           for an example.
 void Image_print(const Image* img, std::ostream& os) {
 
-  //os << //Header??? Where so i get it??// << "\n"; 
+  os << "P3" << "\n";//Header??? Where so i get it??// << "\n"; 
+
+
+
+  //////////////////////////////////////////////////HELP!//////////////////////////////////////////////
+  //os << Image_width(img) << " ";
 
   os << img->width;
 
-  os << img->height << "\n";
+  //os << Image_height(img) << "\n";
 
-  //os << //lowest value??? Where so i get it??// << "\n"; 
+  os << img->height;
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  // Matrix_print(&img->blue_channel, os);
-  //How do i get them in order of RGB???????
-
-
+  os << "255\n";
 
   for (int i = 0; i < (img->height * img->width); i++) {
-    os << img->red_channel.data[i] << " ";
 
+    os << img->red_channel.data[i] << " ";
+    
     os << img->green_channel.data[i] << " ";
 
     os << img->blue_channel.data[i] << " ";
@@ -97,13 +101,15 @@ void Image_print(const Image* img, std::ostream& os) {
         os << "\n";
       }
 
-}
+  }
+
 }
 
 // REQUIRES: img points to a valid Image
 // EFFECTS:  Returns the width of the Image.
 int Image_width(const Image* img) {
   return img->width;
+  //Matrix_width(*img); doesn't work
 }
 
 
@@ -113,14 +119,21 @@ int Image_height(const Image* img) {
     return img->height;
 }
 
+
 // REQUIRES: img points to a valid Image
 //           0 <= row && row < Image_height(img)
 //           0 <= column && column < Image_width(img)
 // EFFECTS:  Returns the pixel in the Image at the given row and column.
 Pixel Image_get_pixel(const Image* img, int row, int column) {
-  (Matrix_at(&img->red_channel, row, column), 
-  (Matrix_at(&img->green_channel, row, column), 
-  (Matrix_at(&img->blue_channel, row, column))));
+
+  Pixel img_pixel;
+
+  img_pixel.r = (*Matrix_at(&img->red_channel, row, column));
+  img_pixel.g = (*Matrix_at(&img->green_channel, row, column));
+  img_pixel.b = (*Matrix_at(&img->blue_channel, row, column));
+
+  return img_pixel;
+
 }
 
 // REQUIRES: img points to a valid Image
@@ -130,11 +143,12 @@ Pixel Image_get_pixel(const Image* img, int row, int column) {
 // EFFECTS:  Sets the pixel in the Image at the given row and column
 //           to the given color.
 void Image_set_pixel(Image* img, int row, int column, Pixel color) {
-  (Matrix_at(&img->red_channel, row, column), 
-  (Matrix_at(&img->green_channel, row, column), 
-  (Matrix_at(&img->blue_channel, row, column))));
-}
+  
+  (*Matrix_at(&img->red_channel, row, column)) = color.r;
+  (*Matrix_at(&img->red_channel, row, column)) = color.g;
+  (*Matrix_at(&img->red_channel, row, column)) = color.b;
 
+}
 
 // REQUIRES: img points to a valid Image
 // MODIFIES: *img
