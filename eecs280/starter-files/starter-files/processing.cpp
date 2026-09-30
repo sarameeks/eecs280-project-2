@@ -261,7 +261,7 @@ void seam_carve_height(Image *img, int newHeight) {
   assert(false); // TODO Replace with your implementation!
 }
 
-// REQUIRES: img points to a valid Image
+// REQUIRES: img poiwnts to a valid Image
 //           0 < newWidth && newWidth <= Image_width(img)
 //           0 < newHeight && newHeight <= Image_height(img)
 // MODIFIES: *img
