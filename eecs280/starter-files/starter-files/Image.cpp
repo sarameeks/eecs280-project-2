@@ -7,11 +7,14 @@
 // EFFECTS:  Initializes the Image with the given width and height, with
 //           all pixels initialized to RGB values of 0.
 void Image_init(Image* img, int width, int height) {
+
   img->width = width;
   img->height = height;
+
   Matrix_init(&img->red_channel, width, height);
   Matrix_init(&img->blue_channel, width, height);
   Matrix_init(&img->green_channel, width, height);
+
 }
 
 // REQUIRES: img points to an Image
@@ -28,34 +31,42 @@ void Image_init(Image* img, std::istream& is) {
   
   int width;
   is >> width;
+  img->width = width;
 
   int height;
   is >> height;
+  img->height = height;
+
 
   int max_value;
   is >> max_value;
 
   Matrix_init(&img->red_channel, width, height);
+
   Matrix_init(&img->green_channel, width, height);
+
   Matrix_init(&img->blue_channel, width, height);
 
-    for (int i = 0; i < (height * width); i++) {
+  //Traverse entire matrix. x is current row and y is current column
+  for (int x = 0; x < height; x++) {
+    for (int y = 0; y < width; y++) {
+    
+    int red;
+    is >> red;
+    *Matrix_at(&img->red_channel, x, y) = red;
 
-      int red;
-      is >> red;
-      img->red_channel.data[i] = red;
+    int green;
+    is >> green;
+    *Matrix_at(&img->green_channel, x, y) = green;
 
-      int green;
-      is >> green;
-      img->green_channel.data[i] = green;
+    int blue;
+    is >> blue;
+    *Matrix_at(&img->blue_channel, x, y) = blue;
 
-      int blue;
-      is >> blue;
-      img->blue_channel.data[i] = blue;
-
-    }
-  
+   }
+  }
 }
+
 
 // REQUIRES: img points to a valid Image
 // MODIFIES: os
@@ -71,45 +82,33 @@ void Image_init(Image* img, std::istream& is) {
 //           int is followed by a space. This means that there will be an
 //           "extra" space at the end of each line. See the project spec
 //           for an example.
+
 void Image_print(const Image* img, std::ostream& os) {
 
   os << "P3" << "\n";//Header??? Where so i get it??// << "\n"; 
 
+  os << Image_width(img) << " ";
 
-
-  //////////////////////////////////////////////////HELP!//////////////////////////////////////////////
-  //os << Image_width(img) << " ";
-
-  os << img->width;
-
-  //os << Image_height(img) << "\n";
-
-  os << img->height;
-  //////////////////////////////////////////////////////////////////////////////////////////////////////
+  os << Image_height(img) << "\n";
 
   os << "255\n";
 
-  for (int i = 0; i < (img->height * img->width); i++) {
-
-    os << img->red_channel.data[i] << " ";
+for (int x = 0; x < Image_height(img); x++) {
+    for (int y = 0; y < Image_width(img); y++) {
+          os << *Matrix_at(&img->red_channel, x, y) << " ";
     
-    os << img->green_channel.data[i] << " ";
+          os << *Matrix_at(&img->green_channel, x, y) << " ";
 
-    os << img->blue_channel.data[i] << " ";
-
-    if ((i + 1) % img->width == 0) {
-        os << "\n";
-      }
-
+          os << *Matrix_at(&img->blue_channel, x, y) << " ";
+    }
+    os << "\n";
   }
 
 }
-
 // REQUIRES: img points to a valid Image
 // EFFECTS:  Returns the width of the Image.
 int Image_width(const Image* img) {
   return img->width;
-  //Matrix_width(*img); doesn't work
 }
 
 
@@ -126,10 +125,12 @@ int Image_height(const Image* img) {
 // EFFECTS:  Returns the pixel in the Image at the given row and column.
 Pixel Image_get_pixel(const Image* img, int row, int column) {
 
-  Pixel img_pixel;
+  Pixel img_pixel = {0, 0, 0};
 
   img_pixel.r = (*Matrix_at(&img->red_channel, row, column));
+
   img_pixel.g = (*Matrix_at(&img->green_channel, row, column));
+
   img_pixel.b = (*Matrix_at(&img->blue_channel, row, column));
 
   return img_pixel;
@@ -145,8 +146,8 @@ Pixel Image_get_pixel(const Image* img, int row, int column) {
 void Image_set_pixel(Image* img, int row, int column, Pixel color) {
   
   (*Matrix_at(&img->red_channel, row, column)) = color.r;
-  (*Matrix_at(&img->red_channel, row, column)) = color.g;
-  (*Matrix_at(&img->red_channel, row, column)) = color.b;
+  (*Matrix_at(&img->green_channel, row, column)) = color.g;
+  (*Matrix_at(&img->blue_channel, row, column)) = color.b;
 
 }
 
