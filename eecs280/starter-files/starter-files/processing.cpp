@@ -181,14 +181,16 @@ vector<int> find_minimal_vertical_seam(const Matrix* cost) {
   vector<int> seam_values;
 
   for (int i = 0; i < (Matrix_width(cost) * Matrix_height(cost) && seam_values.size() < Matrix_height(cost)); i++) {
-    for (int x = 0; x < Matrix_width(cost); x++) {
-      for (int y = 0; y < Matrix_width(cost); y++) {
+    for (int y = 0; y < Matrix_height(cost); y++) {
+      for (int x = 0; x < Matrix_width(cost); x++) {
 
         seam_values[i] = *Matrix_at(cost, x, (Matrix_column_of_min_value_in_row(cost, 0, x, Matrix_width(cost))));
-
+        
     }
-}
   }
+  }
+
+  return seam_values;
 }
 
 
@@ -206,7 +208,31 @@ vector<int> find_minimal_vertical_seam(const Matrix* cost) {
 //           then do an assignment at the end to copy it back into the
 //           original image.
 void remove_vertical_seam(Image *img, const vector<int> &seam) {
-  assert(false); // TODO Replace with your implementation!
+  
+  Image new_image;
+  Image_init(&new_image, (Image_height(img) - 1), Image_height(img));
+
+  int i = 0; 
+
+  for (int y = 0; y < Image_height(&new_image); y++) {     
+    for (int x = 0; x < Image_width(&new_image); x++) {
+        i++;
+
+      if (seam[i] == y) {
+
+        continue;
+      }
+      else  {    
+
+      Image_set_pixel(&new_image, x, y, Image_get_pixel(img, x, y));
+
+    }
+  
+}
+  }
+
+  img = &new_image;
+
 }
 
 
@@ -216,7 +242,12 @@ void remove_vertical_seam(Image *img, const vector<int> &seam) {
 // EFFECTS:  Reduces the width of the given Image to be newWidth by using
 //           the seam carving algorithm. See the spec for details.
 void seam_carve_width(Image *img, int newWidth) {
-  assert(false); // TODO Replace with your implementation!
+  
+  if (Image_width(img) != newWidth) {
+    
+  }
+  
+  // TODO Replace with your implementation!
 }
 
 // REQUIRES: img points to a valid Image
