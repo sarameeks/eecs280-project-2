@@ -189,20 +189,16 @@ vector<int> find_minimal_vertical_seam(const Matrix* cost) {
   vector<int> seam_values;
 //row = y;
 //column = x;
-  int size = 0;
-  size = (Matrix_width(cost) * Matrix_height(cost));
-
-  for (int i = 0; i < size && (seam_values.size() < Matrix_height(cost)); i++) {
+    int value;
 
     for (int y = 0; y < Matrix_height(cost); y++) {
       for (int x = 0; x < Matrix_width(cost); x++) {
 
-        seam_values[i] = *Matrix_at(cost, y, (Matrix_column_of_min_value_in_row(cost, y, x, Matrix_width(cost))));
+        value = *Matrix_at(cost, y, (Matrix_column_of_min_value_in_row(cost, y, x, Matrix_width(cost))));
+        seam_values[y] = value;
         
     }
   }
-  }
-
   return seam_values;
 }
 
@@ -220,36 +216,27 @@ vector<int> find_minimal_vertical_seam(const Matrix* cost) {
 //           then do an assignment at the end to copy it back into the
 //           original image.
 
-//////////////////////////FIX ME
 void remove_vertical_seam(Image *img, const vector<int> &seam) {
   
   Image new_image;
   Image_init(&new_image, (Image_width(img) - 1), Image_height(img));
 
-//row = y;
-//column = x;
 
-  int i = 0; 
+//The left half of the image
+  for (int row = 0; row < Image_height(img); row++) {
+    for (int column = 0; column < seam[row]; column++) {
+    
+    Image_set_pixel(&new_image, row, column, Image_get_pixel(img, row, column));
 
-  for (int y = 0; y < Image_height(&new_image); y++) {     
-    for (int x = 0; x < Image_width(&new_image); x++) {
-        i++
-
-      if (seam[i] == x) {
-
-        continue;
-      }
-      else  {    
-
-      Image_set_pixel(&new_image, y, x, Image_get_pixel(img, y, x));
-
-    }
-  
-}
   }
+  //The right half of the image
+  for (int column = seam[row] + 1; column < Image_width(img); column++) {
 
-  img = &new_image;
+    Image_set_pixel(&new_image, row, column - 1, Image_get_pixel(img, row, column));
 
+  }
+  }
+  *img = new_image;
 }
 
 
