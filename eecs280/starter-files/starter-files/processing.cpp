@@ -115,7 +115,8 @@ void compute_energy_matrix(const Image* img, Matrix* energy) {
 
       west  = Image_get_pixel(img, r - 1, c);
     
-      *Matrix_at(energy, r, c) = squared_difference(north, south) + squared_difference(west, east);
+      *Matrix_at(energy, r, c) = squared_difference(north, south) + 
+      squared_difference(west, east);
 
     }
   }
@@ -124,11 +125,6 @@ void compute_energy_matrix(const Image* img, Matrix* energy) {
   
 }
   
-
-  // assert(false); // TODO Replace with your implementation!
-  // assert(squared_difference(Pixel(), Pixel())); // TODO delete me, this is here to make it compile
-
-
 
 
 // REQUIRES: energy points to a valid Matrix.
@@ -250,13 +246,15 @@ void remove_vertical_seam(Image *img, const vector<int> &seam) {
   for (int row = 0; row < Image_height(img); row++) {
     for (int column = 0; column < seam[row]; column++) {
     
-    Image_set_pixel(&new_image, row, column, Image_get_pixel(img, row, column));
+    Image_set_pixel(&new_image, row, column, 
+      Image_get_pixel(img, row, column));
 
   }
   //The right half of the image
   for (int column = seam[row] + 1; column < Image_width(img); column++) {
 
-    Image_set_pixel(&new_image, row, column - 1, Image_get_pixel(img, row, column));
+    Image_set_pixel(&new_image, row, column - 1, 
+      Image_get_pixel(img, row, column));
 
   }
   }
@@ -296,9 +294,9 @@ void seam_carve_width(Image *img, int newWidth) {
 void seam_carve_height(Image *img, int newHeight) {
 
   rotate_right(img);
-    while (Image_height(img) != newHeight) {
-      seam_carve_width(img, newHeight);
-    }
+
+  seam_carve_width(img, newHeight);
+
   rotate_left(img);
 
 }
