@@ -107,13 +107,10 @@ void compute_energy_matrix(const Image* img, Matrix* energy) {
  
       center = Image_get_pixel(img, r, c);
 
-      north = Image_get_pixel(img, r, c - 1);
-
-      east  = Image_get_pixel(img, r + 1, c);
-
-      south = Image_get_pixel(img, r, c + 1);
-
-      west  = Image_get_pixel(img, r - 1, c);
+      north = Image_get_pixel(img, r - 1, c);
+      south = Image_get_pixel(img, r + 1, c);
+      west  = Image_get_pixel(img, r, c - 1);
+      east  = Image_get_pixel(img, r, c + 1);
     
       *Matrix_at(energy, r, c) = squared_difference(north, south) + 
       squared_difference(west, east);
@@ -212,7 +209,8 @@ vector<int> find_minimal_vertical_seam(const Matrix* cost) {
         column_end = desired_column + 2; // +2 for exclusive end
       }
 
-    desired_column = Matrix_column_of_min_value_in_row(cost, current_row, column_start, column_end);
+    desired_column = Matrix_column_of_min_value_in_row(
+      cost, current_row, column_start, column_end);
     seam_values[current_row] = desired_column;
 
       }
@@ -293,11 +291,11 @@ void seam_carve_width(Image *img, int newWidth) {
 //           90 degrees right.
 void seam_carve_height(Image *img, int newHeight) {
 
-  rotate_right(img);
+  rotate_left(img);
 
   seam_carve_width(img, newHeight);
 
-  rotate_left(img);
+  rotate_right(img);
 
 }
 
@@ -311,7 +309,8 @@ void seam_carve_height(Image *img, int newHeight) {
 //           and then applying seam_carve_height(img, newHeight).
 void seam_carve(Image *img, int newWidth, int newHeight) {
 
-  seam_carve_height(img, newHeight);
   seam_carve_width(img, newWidth);
+
+  seam_carve_height(img, newHeight);
 
 }
