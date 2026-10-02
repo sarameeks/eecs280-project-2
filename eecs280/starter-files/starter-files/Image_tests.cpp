@@ -42,4 +42,25 @@ TEST(test_print_basic) {
 // IMPLEMENT YOUR TEST FUNCTIONS HERE
 // You are encouraged to use any functions from Image_test_helpers.hpp as needed.
 
+
+TEST(test_image_get_pixel) {
+
+}
+
+TEST(test_image_set_pixel){
+
+}
+
+TEST(test_image_print){
+
+}
+TEST(test_image_height){
+
+}
+
+TEST(test_image_fill){
+
+}
+
+
 TEST_MAIN() // Do NOT put a semicolon here
