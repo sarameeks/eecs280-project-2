@@ -53,8 +53,9 @@ int Matrix_height(const Matrix* mat) {
 // EFFECTS:  Returns a pointer to the element in the Matrix
 //           at the given row and column.
 int* Matrix_at(Matrix* mat, int row, int column) {
+
   assert(0 <= row && row < Matrix_height(mat));
-  assert(0 <= column && column < Matrix_width(mat));
+  //assert(0 <= column && column < Matrix_width(mat));
 
   return (&mat->data[row * (mat->width) + column]);
 
@@ -93,22 +94,25 @@ void Matrix_fill_border(Matrix* mat, int value) {
     mat->data[i] = value;
   }
 
-  //Bottom row
-  for (int i = 0; i < Matrix_width(mat); i++) {
-    mat->data[(Matrix_height(mat) -1) * (Matrix_width(mat) + i)] = value;
-  }
-
-  //Right colomn
-  for (int i = 0; i < Matrix_height(mat); i++) {
-    mat->data[i * (Matrix_width(mat))] = value;
-  }
-
-  //Left colomn
-  for (int i = 0; i < Matrix_height(mat); i++) {
-    mat->data[i * Matrix_width(mat)] = value;
-  }
-
+for (int r = 0; r < Matrix_height(mat); r++) {
+  mat->data[r * Matrix_width(mat)] = value;
 }
+
+// Right Column (Column = width - 1)
+for (int r = 0; r < Matrix_height(mat); r++) {
+  mat->data[r * Matrix_width(mat) + (Matrix_width(mat) - 1)] = value;
+}
+
+//Bottom row
+  int container = ((Matrix_height(mat)) * (Matrix_width(mat)));
+
+  int temp = ((Matrix_height(mat)) * (Matrix_width(mat))) - Matrix_width(mat);
+
+  for (int i = temp; i < container; i++) {
+    mat->data[i] = value;
+  }
+}
+
 
 // REQUIRES: mat points to a valid Matrix
 // EFFECTS:  Returns the value of the maximum element in the Matrix
@@ -139,7 +143,8 @@ return max_value;
 //           column_end (exclusive).
 //           If multiple elements are minimal, returns the column of
 //           the leftmost one.
-int Matrix_column_of_min_value_in_row(const Matrix* mat, int row, int column_start, int column_end) {
+int Matrix_column_of_min_value_in_row(
+  const Matrix* mat, int row, int column_start, int column_end) {
   
   assert(0 <= row && row < Matrix_height(mat));
   assert(0 <= column_start && column_end <= Matrix_width(mat));
@@ -169,7 +174,8 @@ int Matrix_column_of_min_value_in_row(const Matrix* mat, int row, int column_sta
 // EFFECTS:  Returns the minimal value in a particular region. The region
 //           is defined as elements in the given row and between
 //           column_start (inclusive) and column_end (exclusive).
-int Matrix_min_value_in_row(const Matrix* mat, int row, int column_start, int column_end) {
+int Matrix_min_value_in_row(const Matrix* mat, int row, 
+  int column_start, int column_end) {
 
   assert(0 <= row && row < Matrix_height(mat));
   assert(0 <= column_start && column_end <= Matrix_width(mat));

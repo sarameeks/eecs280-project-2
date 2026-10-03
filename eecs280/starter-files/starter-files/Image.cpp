@@ -7,7 +7,7 @@
 // EFFECTS:  Initializes the Image with the given width and height, with
 //           all pixels initialized to RGB values of 0.
 void Image_init(Image* img, int width, int height) {
-
+  assert(0 < width && 0 < height);
   img->width = width;
   img->height = height;
 
@@ -37,9 +37,10 @@ void Image_init(Image* img, std::istream& is) {
   is >> height;
   img->height = height;
 
-
   int max_value;
   is >> max_value;
+
+  assert(max_value <= 255);
 
   Matrix_init(&img->red_channel, width, height);
 
@@ -96,9 +97,7 @@ void Image_print(const Image* img, std::ostream& os) {
 for (int x = 0; x < Image_height(img); x++) {
     for (int y = 0; y < Image_width(img); y++) {
           os << *Matrix_at(&img->red_channel, x, y) << " ";
-    
           os << *Matrix_at(&img->green_channel, x, y) << " ";
-
           os << *Matrix_at(&img->blue_channel, x, y) << " ";
     }
     os << "\n";
@@ -125,14 +124,13 @@ int Image_height(const Image* img) {
 // EFFECTS:  Returns the pixel in the Image at the given row and column.
 Pixel Image_get_pixel(const Image* img, int row, int column) {
 
+  assert(0 <= row && row < Image_height(img));
+  assert(0 <= column && column < Image_width(img));
+
   Pixel img_pixel = {0, 0, 0};
-
   img_pixel.r = (*Matrix_at(&img->red_channel, row, column));
-
   img_pixel.g = (*Matrix_at(&img->green_channel, row, column));
-
   img_pixel.b = (*Matrix_at(&img->blue_channel, row, column));
-
   return img_pixel;
 
 }
@@ -145,6 +143,9 @@ Pixel Image_get_pixel(const Image* img, int row, int column) {
 //           to the given color.
 void Image_set_pixel(Image* img, int row, int column, Pixel color) {
   
+  // assert(0 <= row && row < Image_height(img));
+  // assert(0 <= column && column < Image_width(img));
+
   (*Matrix_at(&img->red_channel, row, column)) = color.r;
   (*Matrix_at(&img->green_channel, row, column)) = color.g;
   (*Matrix_at(&img->blue_channel, row, column)) = color.b;
